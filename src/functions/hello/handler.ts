@@ -1,16 +1,12 @@
 import 'source-map-support/register';
 
-import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
-import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
+import { Callback, Context, S3BatchEvent, S3BatchResult, S3CreateEvent, S3EventRecord, S3Handler } from "aws-lambda";
 
-import schema from './schema';
-
-const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-  return formatJSONResponse({
-    message: `Hello ${event.body.name}, welcome to the exciting Serverless world!`,
-    event,
-  });
+const hello: S3Handler = async (event: S3CreateEvent, context: Context, callback: Callback<void> ) => {
+  console.log(event);
+  console.log(context);
+  callback(null, console.log('OK'));
 }
 
 export const main = middyfy(hello);
